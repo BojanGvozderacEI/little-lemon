@@ -22,6 +22,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        { "photosPermission": "The app accesses your photos up update your profile picture" }
+      ]
+    ]
   }
 }
