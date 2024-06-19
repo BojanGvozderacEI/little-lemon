@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Image, TextInput, ScrollView} from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import { COLORS, USER_DATA_STORAGE_KEY } from '../constants';
@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../context/AuthContext';
 
 const Profile = () => {
     const [loading, setLoading] = useState(true);
@@ -23,6 +24,8 @@ const Profile = () => {
     const [passwordChanges, setPasswordChanges] = useState(true);
     const [specialOffers, setSpecialOffers] = useState(true);
     const [newsletter, setNewsletter] = useState(true);
+
+    const { updateUserData } = useContext(AuthContext);
 
     const onImageChange = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -41,7 +44,9 @@ const Profile = () => {
 
     const onLogOut = async () => {
         try {
-            await AsyncStorage.removeItem(USER_DATA_STORAGE_KEY)
+            await AsyncStorage.removeItem(USER_DATA_STORAGE_KEY);
+
+            updateUserData({});
         } catch (error) {
             console.log("Error logging out", error);
         }
@@ -74,8 +79,6 @@ const Profile = () => {
     
             if (userData) {
               const parsedUserData = JSON.parse(userData);
-
-              console.log("PARSED USER DATA", parsedUserData);
 
               setFirstName(parsedUserData.firstName);
               setEmail(parsedUserData.email);
@@ -110,7 +113,7 @@ const Profile = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header initials={initials} profilePicture={imageSource} />
+            <Header initials={initials} profilePicture={imageSource} hasBack />
             <View style={styles.contentContainer}>
                 <Text style={styles.title}>Personal Information</Text>
 

@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingScreen from './screens/Onboarding.js';
 import ProfileScreen from './screens/Profile.js';
+import HomeScreen from './screens/Home.js';
 import SplashScreen from './screens/SplashScreen.js';
 import { SCREEN_NAMES, USER_DATA_STORAGE_KEY } from './constants.js';
 import { AuthContext } from './context/AuthContext.js';
@@ -18,11 +19,13 @@ export default function App() {
       case 'UPDATE_USER_DATA': {
         return {
           ...prevState,
-          ...action.payload,
+          user: action.payload,
         };
       }
     }
-  }, {});
+  }, {
+    user: {},
+  });
 
   useEffect(() => {
     const getUserData = async () => {
@@ -30,7 +33,7 @@ export default function App() {
         const userData = await AsyncStorage.getItem(USER_DATA_STORAGE_KEY);
 
         if (userData) {
-          dispatch({ type: 'UPDATE_USER_DATA', payload: userData });
+          dispatch({ type: 'UPDATE_USER_DATA', payload: JSON.parse(userData) });
         }
 
       } catch {
@@ -55,10 +58,13 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <AuthContext.Provider value={authContext}>
+      <AuthContext.Provider value={{ user: state.user, ...authContext }}>
       <Stack.Navigator>
-        {state.firstName ? (
-          <Stack.Screen name={SCREEN_NAMES.Profile} component={ProfileScreen} options={{ headerShown: false }} />
+        {state.user.firstName ? (
+          <>
+            <Stack.Screen name={SCREEN_NAMES.Home} component={HomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name={SCREEN_NAMES.Profile} component={ProfileScreen} options={{ headerShown: false }} />
+          </>
         ) : (
           <Stack.Screen name={SCREEN_NAMES.Onboarding} component={OnboardingScreen} options={{ headerShown: false }} />
         )}

@@ -1,6 +1,7 @@
 export const SCREEN_NAMES = {
     Onboarding: 'onboarding',
     Profile: 'profile',
+    Home: 'home',
   };
   
 export const USER_DATA_STORAGE_KEY = 'user-data';

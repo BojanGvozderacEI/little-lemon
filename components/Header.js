@@ -3,11 +3,12 @@ import { Pressable, Text, View, StyleSheet, Image } from "react-native";
 import LogoImage from '../assets/logo-full.png';
 import { COLORS } from "../constants";
 
-const Header = ({ hasBack, profilePicture, initials }) => {
+
+const Header = ({ hasBack = false, profilePicture, initials }) => {
     return (
         <View style={styles.container}>
             {/* Back button */}
-            <Pressable style={({ pressed }) => ({...styles.button, opacity: pressed ? 0.5 : 1})}>
+            <Pressable disabled={!hasBack} style={({ pressed }) => ({...styles.button, opacity: pressed ? 0.5 : 1})}>
                 <Text style={styles.buttonText}>{'<'}</Text>
             </Pressable>
 

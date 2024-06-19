@@ -20,6 +20,8 @@ const Onboarding = () => {
 
     const { updateUserData } = useContext(AuthContext);
 
+    AsyncStorage.clear();
+
     const onLogIn = async () => {
         // Guard against invalid input
         if (isLogInDisabled) {
