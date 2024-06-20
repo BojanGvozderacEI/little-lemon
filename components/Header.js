@@ -1,28 +1,34 @@
 import { Pressable, Text, View, StyleSheet, Image } from "react-native";
 
 import LogoImage from '../assets/logo-full.png';
-import { COLORS } from "../constants";
+import { COLORS, SCREEN_NAMES } from "../constants";
+import { useNavigation } from "@react-navigation/native";
 
 
 const Header = ({ hasBack = false, profilePicture, initials }) => {
+    const { navigate, goBack } = useNavigation();
+
     return (
         <View style={styles.container}>
             {/* Back button */}
-            <Pressable disabled={!hasBack} style={({ pressed }) => ({...styles.button, opacity: pressed ? 0.5 : 1})}>
+            {hasBack ? (
+                <Pressable onPress={goBack} disabled={!hasBack} style={({ pressed }) => ({...styles.button, opacity: pressed ? 0.5 : 1})}>
                 <Text style={styles.buttonText}>{'<'}</Text>
-            </Pressable>
+            </Pressable> 
+            ) : <View style={styles.positioningView} />}
+            
 
             {/* Logo */}
             <Image source={LogoImage} style={styles.logo} />
 
             {/* Profile picture */}
-            <View style={styles.profilePictureContainer}>
+            <Pressable style={({ pressed }) => ({...styles.profilePictureContainer, opacity: pressed ? 0.5 : 1})} onPress={() => navigate(SCREEN_NAMES.Profile)}>
                 {profilePicture ? (
                     <Image source={{ uri: profilePicture }} style={styles.profilePicture} />
                 ) : (
                     <Text style={styles.initials}>{initials}</Text>
                 ) }
-            </View>
+            </Pressable>
         </View>
     );
 };
@@ -43,6 +49,9 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
         borderRadius: '100%',
         
+    },
+    positioningView: {
+        width: 40,
     },
     buttonText: {
         color: COLORS.white,
